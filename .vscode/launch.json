@@ -5,10 +5,27 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "main.py",
+      "name": "smm.py (Full)",
       "type": "python",
       "request": "launch",
-      "program": "main.py",
+      "program": "smm.py",
+      "args": ["--doctor", "--import", "songs.tsv"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "smm.py (Doctor)",
+      "type": "python",
+      "request": "launch",
+      "program": "smm.py",
+      "args": ["--doctor"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "smm.py (Import)",
+      "type": "python",
+      "request": "launch",
+      "program": "smm.py",
+      "args": ["--import", "songs.tsv"],
       "console": "integratedTerminal"
     }
   ]
