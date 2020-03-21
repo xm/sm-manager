@@ -13,6 +13,9 @@ Table of Contents
    * [SM Manager](#sm-manager)
    * [Table of Contents](#table-of-contents)
    * [Usage](#usage)
+     * [--doctor](#--doctor)
+     * [--import \<file\>](#--import-)
+     * [--disk-root \<path\>](#--disk-root-)
 <!--te-->
 
 
@@ -21,12 +24,15 @@ Usage
 
 Explained below are the supported commands you can use to manage your songs.
 
-doctor
-------
+--doctor
+--------
 
 TODO
 
-import
-------
+--import <file>
+---------------
 
 TODO
+
+--disk-root <path>
+------------------

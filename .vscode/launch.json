@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "smm.py",
-      "args": ["--doctor", "--import", "songs.tsv"],
+      "args": ["--disk-root", "test-volume", "--doctor", "--import", "songs.tsv"],
       "console": "integratedTerminal"
     },
     {
@@ -17,7 +17,7 @@
       "type": "python",
       "request": "launch",
       "program": "smm.py",
-      "args": ["--doctor"],
+      "args": ["--disk-root", "test-volume", "--doctor"],
       "console": "integratedTerminal"
     },
     {
@@ -25,7 +25,7 @@
       "type": "python",
       "request": "launch",
       "program": "smm.py",
-      "args": ["--import", "songs.tsv"],
+      "args": ["--disk-root", "test-volume", "--import", "songs.tsv"],
       "console": "integratedTerminal"
     }
   ]
