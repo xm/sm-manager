@@ -5,10 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "import.py",
+      "name": "main.py",
       "type": "python",
       "request": "launch",
-      "program": "import.py",
+      "program": "main.py",
       "console": "integratedTerminal"
     }
   ]
