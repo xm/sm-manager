@@ -5,6 +5,7 @@ import pathlib
 from lib import paths
 from lib import templates
 
+
 def read_song_count():
   with open(paths.INFO_HEAD_FILE, 'r') as kinfo:
     data = json.loads(kinfo.read())
@@ -40,7 +41,9 @@ def get_song_meta_files():
   # to the respective meta file. for example: ID0000.ini will be associated with the oldest
   # modified video in DATA_ROOT, and ID0001.ini will be associated with the second oldest
   # modified video, and so on.
-  sorted_data_paths = sorted(pathlib.Path(paths.DATA_ROOT).iterdir(), key=os.path.getmtime)
+  sorted_data_paths = filter(
+    lambda p: p.is_file() and not p.name.startswith('.'),
+    sorted(pathlib.Path(paths.DATA_ROOT).iterdir(), key=os.path.getmtime))
   song_meta_files = []
   
   for i, data_path in enumerate(sorted_data_paths):
@@ -56,8 +59,11 @@ def get_song_meta_files():
 def read_song_meta_file(index):
   path = paths.SONG_META_FILE.format(index=index)
 
-  with open(path) as file: 
-    return file.read()
+  try:
+    with open(path) as file: 
+      return json.loads(file.read())
+  except FileNotFoundError:
+    return None
 
 
 def write_song_meta_file(index, artist, title, genre):
@@ -67,7 +73,3 @@ def write_song_meta_file(index, artist, title, genre):
     file.write(templates.SONG_META_TEMPLATE.format(
       artist=artist, title=title, genre=genre))
     file.truncate()
-    
-    file.seek(0)
-    print('{} saved:'.format(path))
-    print(file.read())
