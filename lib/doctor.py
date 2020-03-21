@@ -20,12 +20,12 @@ def repair_song_metas():
     data_filename = song_meta['data_path'].name
     parsed_meta = parse_song_meta_from_filename(data_filename)
 
-    if (parsed_meta is None):
+    if parsed_meta is None:
       print('[ID{:04}.ini] {}: Could not parse song meta data'.format(i, data_filename))
-    elif (song_meta['meta'] is None):
+    elif song_meta['meta'] is None:
       print('[ID{:04}.ini] {}: creating meta data file'.format(i, data_filename))
       write_song_meta_file(i, **parsed_meta)
-    elif (should_update_meta(song_meta['meta'], parsed_meta)):
+    elif should_update_meta(song_meta['meta'], parsed_meta):
       print('[ID{:04}.ini] {}: updating meta data'.format(i, data_filename))
       print(PRINT_META_TEMPLATE.format(**song_meta['meta'], **parsed_meta))
       write_song_meta_file(i, **parsed_meta)
@@ -41,7 +41,7 @@ def parse_song_meta_from_filename(filename):
   regex = r'^(?P<genre>.+)__(?P<artist>.+)__(?P<title>.+)\.[a-z0-9]+$'  # Genre__Artist__Title.ext
   m = re.match(regex, filename)
 
-  if (m is None): 
+  if m is None: 
     return None
   
   return m.groupdict()
