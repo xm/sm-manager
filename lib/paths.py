@@ -133,7 +133,7 @@ def bootstrap_disk():
   for p, template in files_to_create:
     print('Creating file {}'.format(p))
 
-    with open(p, 'w+') as f:
+    with open(p, 'w+', encoding='utf-8') as f:
       f.write(template)
       f.truncate()
       f.seek(0)

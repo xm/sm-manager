@@ -7,13 +7,13 @@ from lib import templates
 
 
 def read_info_head_song_count():
-  with open(paths.INFO_HEAD_FILE, 'r') as kinfo:
+  with open(paths.INFO_HEAD_FILE, 'r', encoding='utf-8') as kinfo:
     data = json.loads(kinfo.read())
     return data['total_infok']
 
 
 def write_info_head(song_count):
-  with open(paths.INFO_HEAD_FILE, 'r+') as kinfo:
+  with open(paths.INFO_HEAD_FILE, 'r+', encoding='utf-8') as kinfo:
     # read and parse current file
     data = json.loads(kinfo.read())
     kinfo.seek(0)
@@ -66,7 +66,7 @@ def read_song_meta_file(index):
   path = paths.SONG_META_FILE.format(index=index)
 
   try:
-    with open(path) as file:
+    with open(path, encoding='utf-8') as file:
       return json.loads(file.read())
   except FileNotFoundError:
     return None
@@ -75,7 +75,7 @@ def read_song_meta_file(index):
 def write_song_meta_file(index, genre, artist, title):
   path = paths.SONG_META_FILE.format(index=index)
 
-  with open(path, 'w') as file:
+  with open(path, 'w', encoding='utf-8') as file:
     file.write(templates.SONG_META_TEMPLATE.format(
       genre=genre, artist=artist, title=title
     ))
