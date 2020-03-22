@@ -4,6 +4,7 @@ import argparse
 
 from lib.paths import init_paths
 from lib.doctor import repair_song_metas
+from lib.importer import import_songs
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
     repair_song_metas()
 
   if args['import']:
-    print(args['import'])  
+    import_songs(args['import'])
 
 
 if __name__ == "__main__":
