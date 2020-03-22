@@ -1,5 +1,10 @@
 import csv
+import sys
 
+from os import path
+from pytube import YouTube as yt
+
+from lib import paths
 
 def import_songs(songs_file):
     songs_to_download = parse_songs_file(songs_file)
@@ -30,3 +35,19 @@ def download_song(i, total, song):
     print('[{}/{}] Downloading {} - {} from {}'.format(
         i, total, song['Artist'], song['Title'], song['Source']
     ))
+
+    streams = yt(song['Source']).streams
+    streams = streams.filter(subtype='mp4', progressive=True)
+    streams = streams.order_by('resolution').desc()
+
+    if streams is None or len(streams) == 0:
+        print('[{}/{}] Failed -- could not find a suitable stream'.format(i, total))
+        return
+
+    try:
+        filename = paths.get_song_filename(song['Genre'], song['Artist'], song['Title'])
+        saved_file_path = streams[0].download(output_path=paths.DATA_ROOT, filename=filename)
+        print('[{}/{}] Saved to {}'.format(i, total, saved_file_path))
+    except:
+        print('[{}/{}] Failed -- download from source failed'.format(i, total))
+        print('Error', sys.exc_info()[0])

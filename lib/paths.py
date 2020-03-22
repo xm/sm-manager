@@ -1,3 +1,5 @@
+import re
+
 from os import mkdir, path, walk
 from platform import system
 
@@ -38,6 +40,13 @@ def init_paths(disk_root=None):
   SONG_META_FILE = path.join(META_ROOT, SONG_META_FILE)
 
   bootstrap_disk()
+
+
+# Get normalized filename for song
+def get_song_filename(genre, artist, title):
+  filename = '{}__{}__{}'.format(genre, artist, title)
+  filename = re.sub(r'[\\/:*?"<>|]', ' ', filename).strip()
+  return filename
 
 
 # Attempts to find the disk root by looking for ../karaokeinfo/info_head.ini
