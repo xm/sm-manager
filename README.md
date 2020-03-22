@@ -15,8 +15,8 @@ Table of Contents
    * [Quickstart](#quickstart)
    * [Requirements](#requirements)
    * [Usage](#usage)
-     * [--doctor](#--doctor)
      * [--import \<file\>](#--import-)
+     * [--doctor](#--doctor)
      * [--disk-root \<path\>](#--disk-root-)
 <!--te-->
 
