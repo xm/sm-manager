@@ -12,12 +12,21 @@ Table of Contents
 <!--ts-->
    * [SM Manager](#sm-manager)
    * [Table of Contents](#table-of-contents)
+   * [Quickstart](#quickstart)
    * [Requirements](#requirements)
    * [Usage](#usage)
      * [--doctor](#--doctor)
      * [--import \<file\>](#--import-)
      * [--disk-root \<path\>](#--disk-root-)
 <!--te-->
+
+
+Quickstart
+==========
+
+```
+$ python smm.py --import songs.tsv
+```
 
 
 Requirements
@@ -35,17 +44,39 @@ Usage
 
 Explained below are the supported commands you can use to manage your songs.
 
---doctor
---------
-
-TODO
 
 --import <file>
 ---------------
 
-TODO
+Bulk download and import songs specified in a `.tsv` file. Click [here](songs.tsv)
+for an example file.
+
+```
+$ python smm.py --import songs.tsv
+```
+
+
+--doctor
+--------
+
+This option tells the script to only run the post-import doctor command. This command
+will create missing song meta data, update existing-but-outdated meta data, and remove
+extra meta data files.
+
+In order for this command to figure out the songs meta data (read: be useful), the files
+in the data directory must be named in the following format: `Genre__Artist__Title.mp4`.
+
+```
+$ python smm.py --doctor
+```
+
 
 --disk-root <path>
 ------------------
 
-TODO
+Explicitly set the path of where you want the script to run. Useful for
+dry-runs, or if the script cannot detect where your disk is mounted.
+
+```
+$ python smm.py --import songs.tsv --disk-path /Volumes/SMDISK
+```
