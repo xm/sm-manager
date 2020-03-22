@@ -110,11 +110,10 @@ def bootstrap_disk():
   if len(paths_to_create) == 0 and len(files_to_create) == 0:
     return
 
-  print('Some files appear to missing from your disk.')
-  prompt = input('Would you like to create them (y)? ')
+  prompt = input('Files are missing from your disk, would you like to create them (y)? ')
 
   if prompt != 'y':
-    print('Aborting due to missing files on your disk')
+    print('Files are missing on your disk, exiting')
     exit(1)
 
 
