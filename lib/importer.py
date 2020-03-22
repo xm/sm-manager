@@ -3,6 +3,7 @@ import sys
 
 from os import path
 from pytube import YouTube as yt
+from pytube.helpers import safe_filename
 
 from lib import doctor
 from lib import paths
@@ -39,16 +40,22 @@ def parse_songs_file(songs_file):
 
 
 def download_song(song):
+    filename = safe_filename(paths.get_song_filename(song['Genre'], song['Artist'], song['Title']))
+
+    if path.exists(path.join(paths.DATA_ROOT, '{}.mp4'.format(filename))):
+        print('\tFile already exists, skipping')
+        return
+
     streams = yt(song['Source']).streams
     streams = streams.filter(subtype='mp4', progressive=True)
     streams = streams.order_by('resolution').desc()
 
     if streams is None or len(streams) == 0:
-        print('\tFailed -- could not find a suitable stream')
+        print('\tFailed: could not find a suitable stream')
+        return
 
     try:
-        filename = paths.get_song_filename(song['Genre'], song['Artist'], song['Title'])
-        saved_file_path = streams[0].download(output_path=paths.DATA_ROOT, filename=filename)
+        saved_file_path = streams[0].download(output_path=paths.DATA_ROOT, filename=filename, skip_existing=True)
         print('\tSaved video to {}'.format(saved_file_path))
     except:
-        print('\tFailed -- download from source failed ({})'.format(sys.exc_info()[0]))
+        print('\tFailed: download from source failed ({})'.format(sys.exc_info()[0]))
