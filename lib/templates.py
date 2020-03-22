@@ -18,3 +18,24 @@ SONG_META_TEMPLATE = '''\
 	"PL":	0,
 	"FV":	0
 }}'''
+
+NEW_INFO_HEAD_FILE = '''\
+{
+	"filesize_HH":	0,
+	"filesize_HL":	18036305,
+	"filesize_LH":	31830512,
+	"filesize_LL":	69480421,
+	"total_infok":	0,
+	"version":	"1705240958",
+	"machine_id":	"ISM1060"
+}'''
+
+NEW_PLAYLISTS_FILE = '''\
+{
+	"AL":	[]
+}'''
+
+NEW_FAVORITES_FILE = '''\
+{
+	"AF":	[]
+}'''

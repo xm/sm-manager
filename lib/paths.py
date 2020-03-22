@@ -1,19 +1,24 @@
-from os import path, walk
+from os import mkdir, path, walk
 from platform import system
 
+from lib.templates import NEW_INFO_HEAD_FILE, NEW_PLAYLISTS_FILE, \
+  NEW_FAVORITES_FILE
 
 # Path templates which are initialized first thing in main.py
 # NOTE: Do not prefix these with '/'!
 DATA_ROOT = 'karaoke'                # directory of MP4 video files
 META_ROOT = 'karaokeinfo'            # directory *.ini files 
 INFO_HEAD_FILE = 'info_head.ini'     # meta file that keeps track of song counts
+PLAYLISTS_FILE = 'playlist.ini'      # meta file that keeps track of playlists
+FAVORITES_FILE = 'favorite.ini'      # meta file that keeps track of favorite songs
 SONG_META_FILE = 'ID{index:04}.ini'  # song meta file
 
 
 # Important -- this MUST be called as early as possible
 def init_paths(disk_root=None):
-  global DATA_ROOT, META_ROOT, INFO_HEAD_FILE, SONG_META_FILE
-
+  global DATA_ROOT, META_ROOT, INFO_HEAD_FILE, PLAYLISTS_FILE, \
+    FAVORITES_FILE, SONG_META_FILE
+  
   if disk_root is not None:
     if not path.exists(disk_root):
       print('Passed in root path \'{}\' does not exist, exiting'.format(disk_root))
@@ -28,7 +33,11 @@ def init_paths(disk_root=None):
   DATA_ROOT = path.join(disk_root, DATA_ROOT)
   META_ROOT = path.join(disk_root, META_ROOT)
   INFO_HEAD_FILE = path.join(META_ROOT, INFO_HEAD_FILE)
+  PLAYLISTS_FILE = path.join(META_ROOT, PLAYLISTS_FILE)
+  FAVORITES_FILE = path.join(META_ROOT, FAVORITES_FILE)
   SONG_META_FILE = path.join(META_ROOT, SONG_META_FILE)
+
+  bootstrap_disk()
 
 
 # Attempts to find the disk root by looking for ../karaokeinfo/info_head.ini 
@@ -63,3 +72,37 @@ def prompt_for_disk_root(show_header=True):
     return prompt_for_disk_root(False)
 
   return disk_root
+
+
+# Bootstraps a path with missing files
+def bootstrap_disk():
+  paths_to_create = list(filter(lambda d: not path.exists(d), [DATA_ROOT, META_ROOT]))
+  files_to_create = list(filter(lambda f: not path.exists(f[0]), [
+    (INFO_HEAD_FILE, NEW_INFO_HEAD_FILE),
+    (PLAYLISTS_FILE, NEW_PLAYLISTS_FILE),
+    (FAVORITES_FILE, NEW_FAVORITES_FILE)
+  ]))
+
+  if len(paths_to_create) == 0 and len(files_to_create) == 0:
+    return
+
+  print('Some files appear to missing from your disk.')
+  prompt = input('Would you like to create them (y)? ')
+
+  if prompt != 'y':
+    print('Aborting due to missing files on your disk')
+    exit(1)
+  
+
+  for p in paths_to_create:
+    print('Creating directory {}'.format(p))
+    mkdir(p)
+
+  for p, template in files_to_create:
+    print('Creating file {}'.format(p))
+
+    with open(p, 'w+') as f:
+      f.write(template)
+      f.truncate()
+      f.seek(0)
+      print(f.read())
