@@ -41,17 +41,18 @@ def get_song_data_files():
   # to the respective meta file. for example: ID0000.ini will be associated with the oldest
   # modified video in DATA_ROOT, and ID0001.ini will be associated with the second oldest
   # modified video, and so on.
-  sorted_data_paths = list(filter(
-    lambda p: p.is_file() and not p.name.startswith('.'),
-    sorted(pathlib.Path(paths.DATA_ROOT).iterdir(), key=os.path.getmtime)))
-  return sorted_data_paths
+  file_filter = lambda p: p.is_file() and not p.name.startswith('.')
+  sorted_files = sorted(pathlib.Path(paths.DATA_ROOT).iterdir(), key=os.path.getmtime)
+  song_data_files = list(filter(file_filter, sorted_files))
+
+  return song_data_files
 
 
 def get_song_meta_files():
-  sorted_data_paths = get_song_data_files()
+  song_data_files = get_song_data_files()
   song_meta_files = []
 
-  for i, data_path in enumerate(sorted_data_paths):
+  for i, data_path in enumerate(song_data_files):
     song_meta_files.append({
       'data_path': data_path,
       'meta_path': paths.SONG_META_FILE.format(index=i),

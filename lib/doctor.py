@@ -1,6 +1,9 @@
+import os
+import pathlib
 import re
 import time
 
+from lib import paths
 from lib import sm
 
 
@@ -10,21 +13,27 @@ PRINT_META_TEMPLATE = '''\
    Genre: {GE} -> {genre}'''
 
 
+# Main task that attempts to repair and clean up all meta files
 def repair():
-  print('Repairing and updating meta files')
-  repair_song_metas()
-
-  # count number of songs in DATA_ROOT and update info_head
-  prev_song_count = sm.read_info_head_song_count()
   song_count = len(sm.get_song_data_files())
-  sm.write_info_head(song_count)
-  print('Updated info_head.ini song count from {} to {}'.format(prev_song_count, song_count))
+  repair_song_metas()
+  update_info_head(song_count)
+  prune_extra_song_meta_files(song_count)
 
 
-# Simple job that repairs existing song meta files. The way it does this is it looks at normalized
-# song data names that follow the defined pattern, and makes sure its corresponding meta file has
-# the correct values
+# Updates info_head.ini with current song count
+def update_info_head(song_count):
+  prev_song_count = sm.read_info_head_song_count()
+
+  if prev_song_count != song_count:
+    sm.write_info_head(song_count)
+    print('Updated info_head.ini song count from {} to {}'.format(prev_song_count, song_count))
+
+
+# Attempts to create or update missing song meta files
 def repair_song_metas():
+  print('Creating and updating song meta files')
+
   song_metas = sm.get_song_meta_files()
 
   for i, song_meta in enumerate(song_metas):
@@ -58,3 +67,31 @@ def should_update_meta(current, expected):
   return current['TL'] != expected['title'] or \
          current['AT'] != expected['artist'] or \
          current['GE'] != expected['genre']
+
+
+# Finds extra song meta files and deletes them
+def prune_extra_song_meta_files(expected_count):
+  meta_files = pathlib.Path(paths.META_ROOT).iterdir()
+  files_to_delete = list(filter(lambda p: should_prune(p, expected_count), meta_files))
+  delete_count = len(files_to_delete)
+
+  if delete_count == 0:
+    return
+
+  file_copy = 'file' if delete_count is 1 else 'files'
+  print('Found {} extraneous {} in {}:'.format(delete_count, file_copy, paths.META_ROOT))
+
+  for f in files_to_delete:
+    os.remove(f.absolute())
+    print(' - Deleted {}'.format(f.absolute()))
+
+
+def should_prune(p, expected_count):
+  m = re.match(r'^ID(?P<meta_count>\d{4})\.ini$', p.name)
+
+  if m is None:
+    meta_count = None
+  else:
+    meta_count = int(m.groupdict()['meta_count'])
+
+  return p.is_file() and meta_count is not None and meta_count >= expected_count
