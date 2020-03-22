@@ -8,7 +8,7 @@
       "name": "smm.py (Full)",
       "type": "python",
       "request": "launch",
-      "program": "smm.py",
+      "program": "${workspaceFolder}/smm.py",
       "args": ["--disk-root", "test-volume", "--doctor", "--import", "songs.tsv"],
       "console": "integratedTerminal"
     },
@@ -16,7 +16,7 @@
       "name": "smm.py (Doctor)",
       "type": "python",
       "request": "launch",
-      "program": "smm.py",
+      "program": "${workspaceFolder}/smm.py",
       "args": ["--disk-root", "test-volume", "--doctor"],
       "console": "integratedTerminal"
     },
@@ -24,7 +24,7 @@
       "name": "smm.py (Import)",
       "type": "python",
       "request": "launch",
-      "program": "smm.py",
+      "program": "${workspaceFolder}/smm.py",
       "args": ["--disk-root", "test-volume", "--import", "songs.tsv"],
       "console": "integratedTerminal"
     }
