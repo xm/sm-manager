@@ -6,7 +6,7 @@ from lib import paths
 from lib import templates
 
 
-def read_song_count():
+def read_info_head_song_count():
   with open(paths.INFO_HEAD_FILE, 'r') as kinfo:
     data = json.loads(kinfo.read())
     return data['total_infok']
@@ -36,14 +36,19 @@ def write_info_head(song_count):
     print(kinfo.read())
 
 
-def get_song_meta_files():
+def get_song_data_files():
   # get data files sorted by modified time since this is how Singing Machine associates it
   # to the respective meta file. for example: ID0000.ini will be associated with the oldest
   # modified video in DATA_ROOT, and ID0001.ini will be associated with the second oldest
   # modified video, and so on.
-  sorted_data_paths = filter(
+  sorted_data_paths = list(filter(
     lambda p: p.is_file() and not p.name.startswith('.'),
-    sorted(pathlib.Path(paths.DATA_ROOT).iterdir(), key=os.path.getmtime))
+    sorted(pathlib.Path(paths.DATA_ROOT).iterdir(), key=os.path.getmtime)))
+  return sorted_data_paths
+
+
+def get_song_meta_files():
+  sorted_data_paths = get_song_data_files()
   song_meta_files = []
 
   for i, data_path in enumerate(sorted_data_paths):

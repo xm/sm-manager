@@ -3,7 +3,7 @@
 import argparse
 
 from lib.paths import init_paths
-from lib.doctor import repair_song_metas
+from lib.doctor import repair
 from lib.importer import import_songs
 
 
@@ -22,7 +22,7 @@ def main():
   init_paths(args['disk_root'])
 
   if args['doctor']:
-    repair_song_metas()
+    repair()
 
   if args['import']:
     import_songs(args['import'])

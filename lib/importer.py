@@ -18,9 +18,9 @@ def import_songs(songs_file):
         ))
         download_song(song)
 
-    print('\nVideos have finished downloading -- updating song meta files\n')
+    print('Downloads complete!')
 
-    doctor.repair_song_metas()
+    doctor.repair()
 
 
 def parse_songs_file(songs_file):
